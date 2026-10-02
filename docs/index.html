@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Documentation — Cina AI</title>
+
+    <meta
+        name="description"
+        content="Cina AI API documentation for developers."
+    >
+
+    <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+
+<body>
+
+<header class="site-header">
+    <div class="container nav">
+
+        <a href="../index.html" class="brand">
+            <span class="brand-mark">C</span>
+            <span class="brand-name">Cina AI</span>
+        </a>
+
+        <nav class="main-nav">
+            <a href="index.html">Docs</a>
+            <a href="../models/index.html">Models</a>
+            <a href="../playground/index.html">Playground</a>
+            <a href="../pricing.html">Pricing</a>
+        </nav>
+
+        <div class="nav-actions">
+            <a href="../auth/login.html" class="btn btn-ghost">
+                Log in
+            </a>
+
+            <a href="../auth/signup.html" class="btn btn-primary">
+                Start building
+            </a>
+        </div>
+
+        <button class="mobile-menu" id="mobileMenu">
+            ☰
+        </button>
+
+    </div>
+</header>
+
+
+<main class="docs-page">
+
+    <section class="docs-hero">
+        <div class="container">
+
+            <div class="eyebrow">
+                CINA AI API
+            </div>
+
+            <h1>
+                Documentation
+            </h1>
+
+            <p>
+                Everything you need to integrate Cina AI
+                into your application.
+            </p>
+
+        </div>
+    </section>
+
+
+    <section class="docs-layout">
+
+        <div class="container docs-grid">
+
+            <aside class="docs-sidebar">
+
+                <div class="docs-sidebar-group">
+
+                    <span>GETTING STARTED</span>
+
+                    <a href="#introduction" class="active">
+                        Introduction
+                    </a>
+
+                    <a href="#authentication">
+                        Authentication
+                    </a>
+
+                    <a href="#quickstart">
+                        Quickstart
+                    </a>
+
+                </div>
+
+
+                <div class="docs-sidebar-group">
+
+                    <span>API REFERENCE</span>
+
+                    <a href="#models">
+                        Models
+                    </a>
+
+                    <a href="#chat">
+                        Chat
+                    </a>
+
+                    <a href="#generate">
+                        Generate
+                    </a>
+
+                    <a href="#usage">
+                        Usage
+                    </a>
+
+                </div>
+
+
+                <div class="docs-sidebar-group">
+
+                    <span>RESOURCES</span>
+
+                    <a href="../models/index.html">
+                        Model catalog
+                    </a>
+
+                    <a href="../playground/index.html">
+                        Playground
+                    </a>
+
+                    <a href="../status/index.html">
+                        API status
+                    </a>
+
+                </div>
+
+            </aside>
+
+
+            <article class="docs-content">
+
+                <section id="introduction">
+
+                    <span class="docs-label">
+                        GETTING STARTED
+                    </span>
+
+                    <h2>
+                        Introduction
+                    </h2>
+
+                    <p>
+                        Cina AI provides a developer-focused API
+                        for integrating artificial intelligence
+                        into websites, mobile applications,
+                        services and other software.
+                    </p>
+
+                    <p>
+                        The public API uses versioned endpoints
+                        beginning with <code>/v1</code>.
+                    </p>
+
+                </section>
+
+
+                <section id="authentication">
+
+                    <span class="docs-label">
+                        AUTHENTICATION
+                    </span>
+
+                    <h2>
+                        API keys
+                    </h2>
+
+                    <p>
+                        Requests to protected Cina AI endpoints
+                        require an API key.
+                    </p>
+
+                    <div class="code-block">
+
+                        <div class="code-header">
+                            <span>HTTP</span>
+                            <button
+                                data-copy="Authorization: Bearer fc_live_your_key"
+                            >
+                                Copy
+                            </button>
+                        </div>
+
+<pre><code>Authorization: Bearer fc_live_your_key</code></pre>
+
+                    </div>
+
+                    <div class="docs-note">
+                        <strong>Security:</strong>
+                        Never expose a production API key in
+                        browser-side code or public repositories.
+                    </div>
+
+                </section>
+
+
+                <section id="quickstart">
+
+                    <span class="docs-label">
+                        QUICKSTART
+                    </span>
+
+                    <h2>
+                        Make your first request
+                    </h2>
+
+                    <p>
+                        A basic chat request uses the
+                        <code>/v1/chat</code> endpoint.
+                    </p>
+
+                    <div class="code-block">
+
+                        <div class="code-header">
+                            <span>POST /v1/chat</span>
+                            <button
+                                data-copy="POST /v1/chat"
+                            >
+                                Copy
+                            </button>
+                        </div>
+
+<pre><code>POST https://api.cina.ai/v1/chat
+
+Authorization: Bearer fc_live_your_key
+Content-Type: application/json
+
+{
+  "model": "cina-1",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Hello, Cina"
+    }
+  ]
+}</code></pre>
+
+                    </div>
+
+
+                    <h3>
+                        Response
+                    </h3>
+
+                    <div class="code-block">
+
+<pre><code>{
+  "id": "chat_01c...",
+  "object": "chat",
+  "model": "cina-1",
+  "output": "Hello! How can I help?",
+  "usage": {
+    "input_tokens": 8,
+    "output_tokens": 7,
+    "total_tokens": 15
+  }
+}</code></pre>
+
+                    </div>
+
+                </section>
+
+
+                <section id="models">
+
+                    <span class="docs-label">
+                        API REFERENCE
+                    </span>
+
+                    <h2>
+                        List models
+                    </h2>
+
+                    <p>
+                        Retrieve the models currently available
+                        to your API account.
+                    </p>
+
+                    <div class="endpoint">
+                        <span class="method get">
+                            GET
+                        </span>
+
+                        <code>
+                            /v1/models
+                        </code>
+                    </div>
+
+                    <div class="code-block">
+
+<pre><code>{
+  "object": "list",
+  "data": [
+    {
+      "id": "cina-1",
+      "object": "model",
+      "status": "available"
+    }
+  ]
+}</code></pre>
+
+                    </div>
+
+                </section>
+
+
+                <section id="chat">
+
+                    <span class="docs-label">
+                        CHAT
+                    </span>
+
+                    <h2>
+                        Chat
+                    </h2>
+
+                    <p>
+                        Send a sequence of messages to a Cina AI
+                        model and receive a generated response.
+                    </p>
+
+                    <div class="endpoint">
+                        <span class="method post">
+                            POST
+                        </span>
+
+                        <code>
+                            /v1/chat
+                        </code>
+                    </div>
+
+                    <h3>
+                        Request body
+                    </h3>
+
+                    <div class="parameter-list">
+
+                        <div>
+                            <code>model</code>
+                            <span>
+                                The model identifier.
+                            </span>
+                        </div>
+
+                        <div>
+                            <code>messages</code>
+                            <span>
+                                Conversation messages.
+                            </span>
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <section id="generate">
+
+                    <span class="docs-label">
+                        GENERATION
+                    </span>
+
+                    <h2>
+                        Generate
+                    </h2>
+
+                    <p>
+                        Generate text from a direct prompt.
+                    </p>
+
+                    <div class="endpoint">
+                        <span class="method post">
+                            POST
+                        </span>
+
+                        <code>
+                            /v1/generate
+                        </code>
+                    </div>
+
+                    <div class="code-block">
+
+<pre><code>{
+  "model": "cina-1",
+  "prompt": "Explain artificial intelligence simply."
+}</code></pre>
+
+                    </div>
+
+                </section>
+
+
+                <section id="usage">
+
+                    <span class="docs-label">
+                        USAGE
+                    </span>
+
+                    <h2>
+                        Usage
+                    </h2>
+
+                    <p>
+                        Usage information allows applications
+                        and developers to monitor API consumption.
+                    </p>
+
+                    <div class="endpoint">
+                        <span class="method get">
+                            GET
+                        </span>
+
+                        <code>
+                            /v1/usage
+                        </code>
+                    </div>
+
+                </section>
+
+
+                <section class="docs-next">
+
+                    <div>
+                        <span>Next</span>
+
+                        <strong>
+                            Explore Cina models
+                        </strong>
+                    </div>
+
+                    <a
+                        href="../models/index.html"
+                        class="btn btn-secondary"
+                    >
+                        View models →
+                    </a>
+
+                </section>
+
+            </article>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<footer class="site-footer">
+
+    <div class="container footer-grid">
+
+        <div>
+
+            <a href="../index.html" class="brand">
+                <span class="brand-mark">C</span>
+                <span class="brand-name">Cina AI</span>
+            </a>
+
+            <p>
+                Independent AI infrastructure for developers.
+            </p>
+
+        </div>
+
+        <div class="footer-links">
+
+            <a href="index.html">Documentation</a>
+            <a href="../models/index.html">Models</a>
+            <a href="../status/index.html">Status</a>
+            <a href="../legal/privacy.html">Privacy</a>
+            <a href="../legal/terms.html">Terms</a>
+
+        </div>
+
+        <div class="footer-bottom">
+            © 2026 Cina AI
+        </div>
+
+    </div>
+
+</footer>
+
+
+<script src="../assets/js/app.js"></script>
+
+</body>
+</html>
