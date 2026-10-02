@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Log in to your Cina AI developer account.">
+  <title>Log in — Cina AI</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body class="auth-page">
+
+<header class="site-header">
+  <div class="container nav-wrap">
+    <a href="../index.html" class="brand">Cina AI</a>
+
+    <nav class="main-nav">
+      <a href="../docs/index.html">Docs</a>
+      <a href="../models/index.html">Models</a>
+      <a href="../playground/index.html">Playground</a>
+      <a href="../pricing.html">Pricing</a>
+      <a href="signup.html">Create account</a>
+    </nav>
+  </div>
+</header>
+
+<main class="auth-main">
+  <section class="auth-card">
+    <div class="auth-heading">
+      <span class="eyebrow">WELCOME BACK</span>
+      <h1>Log in to Cina AI</h1>
+      <p>Access your developer dashboard and API keys.</p>
+    </div>
+
+    <form class="auth-form" id="loginForm">
+
+      <div class="form-field">
+        <label for="email">Email address</label>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          placeholder="you@example.com"
+          autocomplete="email"
+          required
+        >
+      </div>
+
+      <div class="form-field">
+        <div class="field-label-row">
+          <label for="password">Password</label>
+          <a href="#">Forgot password?</a>
+        </div>
+
+        <input
+          type="password"
+          id="password"
+          name="password"
+          placeholder="Enter your password"
+          autocomplete="current-password"
+          required
+        >
+      </div>
+
+      <label class="remember-row">
+        <input type="checkbox" id="remember">
+        <span>Remember me</span>
+      </label>
+
+      <button type="submit" class="auth-submit">
+        Log in
+      </button>
+
+      <div class="auth-message" id="authMessage"></div>
+    </form>
+
+    <div class="auth-divider">
+      <span>or</span>
+    </div>
+
+    <button type="button" class="social-button" id="googleLogin">
+      <span class="social-icon">G</span>
+      Continue with Google
+    </button>
+
+    <p class="auth-bottom">
+      Don't have an account?
+      <a href="signup.html">Create one</a>
+    </p>
+  </section>
+</main>
+
+<footer class="auth-footer">
+  <a href="../legal/privacy.html">Privacy</a>
+  <a href="../legal/terms.html">Terms</a>
+  <span>© 2026 Cina AI</span>
+</footer>
+
+<script src="../assets/js/app.js"></script>
+
+<script>
+  const loginForm = document.getElementById("loginForm");
+  const authMessage = document.getElementById("authMessage");
+  const googleLogin = document.getElementById("googleLogin");
+
+  loginForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+
+    authMessage.textContent =
+      "Authentication will be connected when the Cina AI backend is deployed.";
+
+    authMessage.className = "auth-message visible";
+  });
+
+  googleLogin.addEventListener("click", () => {
+    authMessage.textContent =
+      "Google authentication will be connected with the production authentication system.";
+
+    authMessage.className = "auth-message visible";
+  });
+</script>
+
+</body>
+</html>
