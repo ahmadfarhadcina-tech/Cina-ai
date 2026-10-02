@@ -2214,3 +2214,33 @@ button {
     font-size: 28px;
   }
 }
+.signup-card {
+  max-width: 460px;
+}
+
+.password-hint {
+  margin-top: -2px;
+  color: #858d91;
+  font-size: 12px;
+}
+
+.terms-check {
+  align-items: flex-start;
+  line-height: 1.5;
+}
+
+.terms-check input {
+  flex-shrink: 0;
+  margin-top: 3px;
+}
+
+.terms-check a {
+  color: var(--green-dark);
+  font-weight: 650;
+  text-decoration: none;
+}
+
+.auth-message.error {
+  background: #fff3f3;
+  color: #b42318;
+}
