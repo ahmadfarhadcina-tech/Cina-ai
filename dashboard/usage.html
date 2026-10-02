@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Cina AI API usage dashboard.">
+  <title>Usage — Cina AI</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body class="dashboard-page">
+
+<header class="dashboard-header">
+  <div class="container dashboard-nav">
+    <a href="../index.html" class="brand">Cina AI</a>
+
+    <div class="dashboard-user">
+      <span class="user-avatar">A</span>
+      <span class="user-name">Developer</span>
+    </div>
+  </div>
+</header>
+
+<div class="dashboard-layout">
+
+  <aside class="dashboard-sidebar">
+    <nav class="dashboard-menu">
+
+      <div class="dashboard-menu-group">
+        <span class="dashboard-menu-title">Workspace</span>
+
+        <a href="index.html" class="dashboard-link">
+          <span>⌂</span>
+          Overview
+        </a>
+
+        <a href="usage.html" class="dashboard-link active">
+          <span>◷</span>
+          Usage
+        </a>
+
+        <a href="keys.html" class="dashboard-link">
+          <span>⚿</span>
+          API Keys
+        </a>
+
+        <a href="activity.html" class="dashboard-link">
+          <span>↕</span>
+          Activity
+        </a>
+      </div>
+
+      <div class="dashboard-menu-group">
+        <span class="dashboard-menu-title">Platform</span>
+
+        <a href="../models/index.html" class="dashboard-link">
+          <span>◈</span>
+          Models
+        </a>
+
+        <a href="../playground/index.html" class="dashboard-link">
+          <span>▷</span>
+          Playground
+        </a>
+
+        <a href="../docs/index.html" class="dashboard-link">
+          <span>?</span>
+          Documentation
+        </a>
+      </div>
+
+      <div class="dashboard-menu-group">
+        <span class="dashboard-menu-title">Account</span>
+
+        <a href="settings.html" class="dashboard-link">
+          <span>⚙</span>
+          Settings
+        </a>
+
+        <a href="../index.html" class="dashboard-link">
+          <span>↪</span>
+          Sign out
+        </a>
+      </div>
+
+    </nav>
+  </aside>
+
+  <main class="dashboard-content">
+
+    <div class="dashboard-top">
+      <div>
+        <span class="eyebrow">API ANALYTICS</span>
+        <h1>Usage</h1>
+        <p>Monitor requests and token usage across your Cina AI applications.</p>
+      </div>
+
+      <select class="usage-period" id="usagePeriod">
+        <option value="7">Last 7 days</option>
+        <option value="30" selected>Last 30 days</option>
+        <option value="90">Last 90 days</option>
+      </select>
+    </div>
+
+    <section class="dashboard-stats usage-stats">
+
+      <article class="dashboard-stat-card">
+        <span class="stat-label">Total requests</span>
+        <strong id="totalRequests">0</strong>
+        <small>Selected period</small>
+      </article>
+
+      <article class="dashboard-stat-card">
+        <span class="stat-label">Input tokens</span>
+        <strong id="inputTokens">0</strong>
+        <small>Tokens processed</small>
+      </article>
+
+      <article class="dashboard-stat-card">
+        <span class="stat-label">Output tokens</span>
+        <strong id="outputTokens">0</strong>
+        <small>Tokens generated</small>
+      </article>
+
+      <article class="dashboard-stat-card">
+        <span class="stat-label">Total tokens</span>
+        <strong id="totalTokens">0</strong>
+        <small>Input + output</small>
+      </article>
+
+    </section>
+
+    <section class="dashboard-panel usage-chart-panel">
+
+      <div class="panel-header">
+        <div>
+          <h2>API requests</h2>
+          <p>Requests made during the selected period.</p>
+        </div>
+
+        <span class="chart-legend">
+          <i></i>
+          Requests
+        </span>
+      </div>
+
+      <div class="usage-chart" id="usageChart">
+        <div class="chart-empty">
+          <div class="empty-icon">◷</div>
+          <h3>No usage data yet</h3>
+          <p>
+            Request and token activity will appear here after
+            your application starts using the Cina AI API.
+          </p>
+        </div>
+      </div>
+
+    </section>
+
+    <section class="usage-two-column">
+
+      <article class="dashboard-panel">
+        <div class="panel-header">
+          <div>
+            <h2>Model usage</h2>
+            <p>Usage by Cina AI model.</p>
+          </div>
+        </div>
+
+        <div class="usage-row">
+          <div class="usage-row-info">
+            <strong>cina-1</strong>
+            <span>0 requests</span>
+          </div>
+
+          <div class="usage-bar">
+            <span style="width: 0%"></span>
+          </div>
+
+          <strong>0%</strong>
+        </div>
+      </article>
+
+      <article class="dashboard-panel">
+        <div class="panel-header">
+          <div>
+            <h2>API endpoints</h2>
+            <p>Requests by endpoint.</p>
+          </div>
+        </div>
+
+        <div class="endpoint-list">
+
+          <div class="endpoint-row">
+            <code>/v1/chat</code>
+            <span>0</span>
+          </div>
+
+          <div class="endpoint-row">
+            <code>/v1/generate</code>
+            <span>0</span>
+          </div>
+
+          <div class="endpoint-row">
+            <code>/v1/models</code>
+            <span>0</span>
+          </div>
+
+        </div>
+      </article>
+
+    </section>
+
+    <section class="dashboard-panel usage-info-panel">
+
+      <div class="panel-header">
+        <div>
+          <h2>About usage data</h2>
+          <p>How Cina AI will measure API activity.</p>
+        </div>
+      </div>
+
+      <div class="usage-info-grid">
+
+        <div>
+          <strong>Requests</strong>
+          <p>
+            Each successful API request is counted toward your
+            account usage.
+          </p>
+        </div>
+
+        <div>
+          <strong>Input tokens</strong>
+          <p>
+            Tokens contained in prompts and other input sent to
+            the selected model.
+          </p>
+        </div>
+
+        <div>
+          <strong>Output tokens</strong>
+          <p>
+            Tokens generated by the model in the API response.
+          </p>
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+</div>
+
+<script src="../assets/js/app.js"></script>
+
+<script>
+  const usagePeriod = document.getElementById("usagePeriod");
+
+  usagePeriod.addEventListener("change", () => {
+    document.getElementById("totalRequests").textContent = "0";
+    document.getElementById("inputTokens").textContent = "0";
+    document.getElementById("outputTokens").textContent = "0";
+    document.getElementById("totalTokens").textContent = "0";
+  });
+</script>
+
+</body>
+</html>
