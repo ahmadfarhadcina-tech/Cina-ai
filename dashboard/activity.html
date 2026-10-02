@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#087a55">
+  <title>Activity — Cina AI</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body class="dashboard-page">
+
+  <header class="dashboard-header">
+    <a href="../index.html" class="dashboard-logo">
+      <span class="logo-mark">C</span>
+      <span>Cina AI</span>
+    </a>
+
+    <button class="dashboard-menu" id="dashboardMenu" aria-label="Open menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </header>
+
+  <div class="dashboard-layout">
+
+    <aside class="dashboard-sidebar" id="dashboardSidebar">
+
+      <div class="sidebar-workspace">
+        <span class="sidebar-label">Workspace</span>
+
+        <a href="index.html" class="sidebar-link">
+          <span class="sidebar-icon">⌂</span>
+          Overview
+        </a>
+
+        <a href="usage.html" class="sidebar-link">
+          <span class="sidebar-icon">◫</span>
+          Usage
+        </a>
+
+        <a href="keys.html" class="sidebar-link">
+          <span class="sidebar-icon">⌘</span>
+          API Keys
+        </a>
+
+        <a href="activity.html" class="sidebar-link active">
+          <span class="sidebar-icon">◷</span>
+          Activity
+        </a>
+      </div>
+
+      <div class="sidebar-workspace">
+        <span class="sidebar-label">Platform</span>
+
+        <a href="../models/index.html" class="sidebar-link">
+          <span class="sidebar-icon">◇</span>
+          Models
+        </a>
+
+        <a href="../playground/index.html" class="sidebar-link">
+          <span class="sidebar-icon">▷</span>
+          Playground
+        </a>
+
+        <a href="../docs/index.html" class="sidebar-link">
+          <span class="sidebar-icon">▤</span>
+          Documentation
+        </a>
+      </div>
+
+      <div class="sidebar-workspace">
+        <span class="sidebar-label">Account</span>
+
+        <a href="settings.html" class="sidebar-link">
+          <span class="sidebar-icon">⚙</span>
+          Settings
+        </a>
+
+        <a href="../auth/login.html" class="sidebar-link">
+          <span class="sidebar-icon">↪</span>
+          Sign out
+        </a>
+      </div>
+
+      <div class="sidebar-bottom">
+        <div class="sidebar-plan">
+          <div class="plan-icon">C</div>
+          <div>
+            <strong>Free plan</strong>
+            <span>Cina AI</span>
+          </div>
+        </div>
+      </div>
+
+    </aside>
+
+    <main class="dashboard-main">
+
+      <div class="dashboard-page-heading">
+        <div>
+          <span class="dashboard-eyebrow">Workspace</span>
+          <h1>Activity</h1>
+          <p>Review recent API requests and account events.</p>
+        </div>
+      </div>
+
+      <section class="activity-toolbar">
+
+        <div class="activity-filter">
+          <label for="activityType">Event type</label>
+          <select id="activityType">
+            <option value="all">All activity</option>
+            <option value="requests">API requests</option>
+            <option value="keys">API keys</option>
+            <option value="account">Account</option>
+          </select>
+        </div>
+
+        <div class="activity-filter">
+          <label for="activityStatus">Status</label>
+          <select id="activityStatus">
+            <option value="all">All statuses</option>
+            <option value="success">Success</option>
+            <option value="failed">Failed</option>
+          </select>
+        </div>
+
+        <div class="activity-filter activity-search">
+          <label for="activitySearch">Search</label>
+          <div class="activity-search-box">
+            <span>⌕</span>
+            <input
+              type="search"
+              id="activitySearch"
+              placeholder="Search activity..."
+            >
+          </div>
+        </div>
+
+      </section>
+
+      <section class="activity-card">
+
+        <div class="activity-card-header">
+          <div>
+            <h2>Recent activity</h2>
+            <p>Events from your Cina AI workspace will appear here.</p>
+          </div>
+
+          <button class="activity-refresh" id="refreshActivity">
+            Refresh
+          </button>
+        </div>
+
+        <div class="activity-table-wrap">
+          <table class="activity-table">
+            <thead>
+              <tr>
+                <th>Time</th>
+                <th>Event</th>
+                <th>Endpoint</th>
+                <th>Status</th>
+                <th>Details</th>
+              </tr>
+            </thead>
+
+            <tbody id="activityTableBody"></tbody>
+          </table>
+
+          <div class="activity-empty" id="activityEmpty">
+            <div class="activity-empty-icon">◷</div>
+            <h3>No activity yet</h3>
+            <p>
+              API requests, key events, and account activity
+              will appear here once your workspace starts receiving events.
+            </p>
+            <a href="../playground/index.html" class="dashboard-primary-btn">
+              Open Playground
+            </a>
+          </div>
+        </div>
+
+      </section>
+
+      <section class="activity-info-grid">
+
+        <div class="activity-info-card">
+          <div class="activity-info-icon">◉</div>
+          <div>
+            <h3>API requests</h3>
+            <p>
+              Requests made through your Cina AI API will be recorded
+              with their endpoint and status.
+            </p>
+          </div>
+        </div>
+
+        <div class="activity-info-card">
+          <div class="activity-info-icon">⌘</div>
+          <div>
+            <h3>API key events</h3>
+            <p>
+              Key creation and revocation events will be available
+              in your workspace history.
+            </p>
+          </div>
+        </div>
+
+        <div class="activity-info-card">
+          <div class="activity-info-icon">⚙</div>
+          <div>
+            <h3>Account events</h3>
+            <p>
+              Important account and workspace changes can be tracked
+              from this page.
+            </p>
+          </div>
+        </div>
+
+      </section>
+
+    </main>
+
+  </div>
+
+  <script src="../assets/js/app.js"></script>
+
+  <script>
+    const menuButton = document.getElementById("dashboardMenu");
+    const sidebar = document.getElementById("dashboardSidebar");
+
+    if (menuButton && sidebar) {
+      menuButton.addEventListener("click", () => {
+        sidebar.classList.toggle("open");
+        menuButton.classList.toggle("active");
+      });
+    }
+
+    const refreshButton = document.getElementById("refreshActivity");
+
+    if (refreshButton) {
+      refreshButton.addEventListener("click", () => {
+        refreshButton.textContent = "Refreshing...";
+        refreshButton.disabled = true;
+
+        setTimeout(() => {
+          refreshButton.textContent = "Refresh";
+          refreshButton.disabled = false;
+        }, 500);
+      });
+    }
+  </script>
+
+</body>
+</html>
