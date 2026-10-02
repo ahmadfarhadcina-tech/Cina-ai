@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Cina AI developer dashboard.">
+  <title>Dashboard — Cina AI</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body class="dashboard-page">
+
+<header class="dashboard-header">
+  <div class="container dashboard-nav">
+    <a href="../index.html" class="brand">Cina AI</a>
+
+    <div class="dashboard-user">
+      <span class="user-avatar">A</span>
+      <span class="user-name">Developer</span>
+    </div>
+  </div>
+</header>
+
+<div class="dashboard-layout">
+
+  <aside class="dashboard-sidebar">
+    <nav class="dashboard-menu">
+
+      <div class="dashboard-menu-group">
+        <span class="dashboard-menu-title">Workspace</span>
+
+        <a href="index.html" class="dashboard-link active">
+          <span>⌂</span>
+          Overview
+        </a>
+
+        <a href="usage.html" class="dashboard-link">
+          <span>◷</span>
+          Usage
+        </a>
+
+        <a href="keys.html" class="dashboard-link">
+          <span>⚿</span>
+          API Keys
+        </a>
+
+        <a href="activity.html" class="dashboard-link">
+          <span>↕</span>
+          Activity
+        </a>
+      </div>
+
+      <div class="dashboard-menu-group">
+        <span class="dashboard-menu-title">Platform</span>
+
+        <a href="../models/index.html" class="dashboard-link">
+          <span>◈</span>
+          Models
+        </a>
+
+        <a href="../playground/index.html" class="dashboard-link">
+          <span>▷</span>
+          Playground
+        </a>
+
+        <a href="../docs/index.html" class="dashboard-link">
+          <span>?</span>
+          Documentation
+        </a>
+      </div>
+
+      <div class="dashboard-menu-group">
+        <span class="dashboard-menu-title">Account</span>
+
+        <a href="settings.html" class="dashboard-link">
+          <span>⚙</span>
+          Settings
+        </a>
+
+        <a href="../index.html" class="dashboard-link">
+          <span>↪</span>
+          Sign out
+        </a>
+      </div>
+
+    </nav>
+  </aside>
+
+  <main class="dashboard-content">
+
+    <div class="dashboard-top">
+      <div>
+        <span class="eyebrow">DEVELOPER DASHBOARD</span>
+        <h1>Welcome back.</h1>
+        <p>Manage your Cina AI API access and development activity.</p>
+      </div>
+
+      <a href="../playground/index.html" class="dashboard-primary-button">
+        Open Playground
+      </a>
+    </div>
+
+    <section class="dashboard-stats">
+
+      <article class="dashboard-stat-card">
+        <span class="stat-label">API requests</span>
+        <strong>0</strong>
+        <small>This month</small>
+      </article>
+
+      <article class="dashboard-stat-card">
+        <span class="stat-label">Tokens used</span>
+        <strong>0</strong>
+        <small>This month</small>
+      </article>
+
+      <article class="dashboard-stat-card">
+        <span class="stat-label">API keys</span>
+        <strong>0</strong>
+        <small>Active keys</small>
+      </article>
+
+      <article class="dashboard-stat-card">
+        <span class="stat-label">Current plan</span>
+        <strong>Free</strong>
+        <small>Cina AI</small>
+      </article>
+
+    </section>
+
+    <section class="dashboard-grid">
+
+      <article class="dashboard-panel">
+        <div class="panel-header">
+          <div>
+            <h2>API access</h2>
+            <p>Your connection to the Cina AI API.</p>
+          </div>
+
+          <span class="status-pill">Ready</span>
+        </div>
+
+        <div class="api-preview">
+          <div>
+            <span>Base URL</span>
+            <code>https://api.cina.ai/v1</code>
+          </div>
+
+          <div>
+            <span>Default model</span>
+            <code>cina-1</code>
+          </div>
+
+          <div>
+            <span>Authentication</span>
+            <code>Bearer fc_live_...</code>
+          </div>
+        </div>
+
+        <a href="keys.html" class="panel-link">
+          Manage API keys →
+        </a>
+      </article>
+
+      <article class="dashboard-panel">
+        <div class="panel-header">
+          <div>
+            <h2>Quick start</h2>
+            <p>Make your first API request.</p>
+          </div>
+        </div>
+
+        <div class="quick-actions">
+          <a href="../docs/index.html" class="quick-action">
+            <strong>Read the docs</strong>
+            <span>Learn how the API works →</span>
+          </a>
+
+          <a href="../playground/index.html" class="quick-action">
+            <strong>Try the Playground</strong>
+            <span>Test Cina AI in your browser →</span>
+          </a>
+
+          <a href="keys.html" class="quick-action">
+            <strong>Create an API key</strong>
+            <span>Connect your application →</span>
+          </a>
+        </div>
+      </article>
+
+    </section>
+
+    <section class="dashboard-panel activity-panel">
+
+      <div class="panel-header">
+        <div>
+          <h2>Recent activity</h2>
+          <p>Your latest API and account activity.</p>
+        </div>
+
+        <a href="activity.html" class="panel-link">
+          View all →
+        </a>
+      </div>
+
+      <div class="empty-state">
+        <div class="empty-icon">◷</div>
+        <h3>No activity yet</h3>
+        <p>
+          Your API requests and account activity will appear here
+          once you start using Cina AI.
+        </p>
+
+        <a href="../playground/index.html" class="dashboard-secondary-button">
+          Try Cina AI
+        </a>
+      </div>
+
+    </section>
+
+  </main>
+</div>
+
+<script src="../assets/js/app.js"></script>
+
+</body>
+</html>
