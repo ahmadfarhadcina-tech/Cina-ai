@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Playground — Cina AI</title>
+
+    <meta
+        name="description"
+        content="Test Cina AI models directly in the developer playground."
+    >
+
+    <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+
+<body>
+
+<header class="site-header">
+    <div class="container nav">
+
+        <a href="../index.html" class="brand">
+            <span class="brand-mark">C</span>
+            <span class="brand-name">Cina AI</span>
+        </a>
+
+        <nav class="main-nav">
+            <a href="../docs/index.html">Docs</a>
+            <a href="../models/index.html">Models</a>
+            <a href="index.html">Playground</a>
+            <a href="../pricing.html">Pricing</a>
+        </nav>
+
+        <div class="nav-actions">
+            <a href="../auth/login.html" class="btn btn-ghost">
+                Log in
+            </a>
+
+            <a href="../auth/signup.html" class="btn btn-primary">
+                Start building
+            </a>
+        </div>
+
+        <button class="mobile-menu" id="mobileMenu">
+            ☰
+        </button>
+
+    </div>
+</header>
+
+
+<main>
+
+    <section class="playground-hero">
+
+        <div class="container">
+
+            <div class="eyebrow">
+                CINA AI PLAYGROUND
+            </div>
+
+            <h1>
+                Test AI without<br>
+                writing the code.
+            </h1>
+
+            <p>
+                Experiment with Cina models, prompts and
+                responses before integrating the API into
+                your application.
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <section class="playground-section">
+
+        <div class="container">
+
+            <div class="playground-shell">
+
+                <div class="playground-toolbar">
+
+                    <div class="toolbar-group">
+
+                        <label for="model">
+                            Model
+                        </label>
+
+                        <select id="model">
+                            <option value="cina-1">
+                                cina-1
+                            </option>
+                        </select>
+
+                    </div>
+
+
+                    <div class="toolbar-status">
+
+                        <span class="status-dot"></span>
+
+                        API ready
+
+                    </div>
+
+                </div>
+
+
+                <div class="playground-body">
+
+                    <div class="prompt-panel">
+
+                        <div class="panel-heading">
+
+                            <div>
+                                <span>
+                                    PROMPT
+                                </span>
+
+                                <strong>
+                                    Your message
+                                </strong>
+                            </div>
+
+                            <button
+                                type="button"
+                                class="clear-button"
+                                id="clearPrompt"
+                            >
+                                Clear
+                            </button>
+
+                        </div>
+
+
+                        <textarea
+                            id="prompt"
+                            placeholder="Ask Cina anything..."
+                            spellcheck="true"
+                        ></textarea>
+
+
+                        <div class="prompt-footer">
+
+                            <span>
+                                <span id="charCount">0</span>
+                                characters
+                            </span>
+
+                            <button
+                                type="button"
+                                class="btn btn-primary"
+                                id="sendPrompt"
+                            >
+                                Send request
+                                <span>→</span>
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="response-panel">
+
+                        <div class="panel-heading">
+
+                            <div>
+                                <span>
+                                    RESPONSE
+                                </span>
+
+                                <strong>
+                                    Cina AI
+                                </strong>
+                            </div>
+
+                            <button
+                                type="button"
+                                class="clear-button"
+                                id="copyResponse"
+                            >
+                                Copy
+                            </button>
+
+                        </div>
+
+
+                        <div
+                            class="response-content"
+                            id="response"
+                        >
+
+                            <div class="response-empty">
+
+                                <div class="response-icon">
+                                    C
+                                </div>
+
+                                <h3>
+                                    Your response will appear here.
+                                </h3>
+
+                                <p>
+                                    Enter a prompt and send your
+                                    first request to Cina AI.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="response-meta">
+
+                            <span>
+                                Model:
+                                <strong id="responseModel">
+                                    cina-1
+                                </strong>
+                            </span>
+
+                            <span>
+                                Tokens:
+                                <strong id="responseTokens">
+                                    —
+                                </strong>
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="playground-footer">
+
+                    <div>
+                        <span class="secure-icon">
+                            ✓
+                        </span>
+
+                        Playground requests are protected
+                        by your Cina AI account.
+                    </div>
+
+                    <a href="../docs/index.html#chat">
+                        View API docs →
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <section class="playground-info">
+
+        <div class="container">
+
+            <div class="info-grid">
+
+                <div>
+                    <span class="eyebrow">
+                        FROM TEST TO PRODUCTION
+                    </span>
+
+                    <h2>
+                        Build here.
+                        Integrate anywhere.
+                    </h2>
+
+                    <p>
+                        Once your prompt works the way you want,
+                        copy the same model and message structure
+                        into your application using the Cina API.
+                    </p>
+                </div>
+
+
+                <div class="playground-code">
+
+<pre><code>POST /v1/chat
+
+{
+  "model": "cina-1",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Your prompt"
+    }
+  ]
+}</code></pre>
+
+                    <a
+                        href="../docs/index.html#chat"
+                        class="text-link"
+                    >
+                        Read integration guide →
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <section class="cta-section">
+
+        <div class="container">
+
+            <div class="eyebrow">
+                BUILD WITH CINA
+            </div>
+
+            <h2>
+                Ready to use the API?
+            </h2>
+
+            <p>
+                Create your developer account and generate
+                your first API key.
+            </p>
+
+            <a
+                href="../auth/signup.html"
+                class="btn btn-primary btn-large"
+            >
+                Create free account →
+            </a>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<footer class="site-footer">
+
+    <div class="container footer-grid">
+
+        <div>
+
+            <a href="../index.html" class="brand">
+                <span class="brand-mark">C</span>
+                <span class="brand-name">Cina AI</span>
+            </a>
+
+            <p>
+                Independent AI infrastructure for developers.
+            </p>
+
+        </div>
+
+
+        <div class="footer-links">
+
+            <a href="../docs/index.html">
+                Documentation
+            </a>
+
+            <a href="../models/index.html">
+                Models
+            </a>
+
+            <a href="index.html">
+                Playground
+            </a>
+
+            <a href="../status/index.html">
+                Status
+            </a>
+
+            <a href="../legal/privacy.html">
+                Privacy
+            </a>
+
+            <a href="../legal/terms.html">
+                Terms
+            </a>
+
+        </div>
+
+
+        <div class="footer-bottom">
+            © 2026 Cina AI
+        </div>
+
+    </div>
+
+</footer>
+
+
+<script src="../assets/js/app.js"></script>
+
+<script>
+const promptInput = document.getElementById("prompt");
+const charCount = document.getElementById("charCount");
+const clearPrompt = document.getElementById("clearPrompt");
+const sendPrompt = document.getElementById("sendPrompt");
+const response = document.getElementById("response");
+const copyResponse = document.getElementById("copyResponse");
+const responseModel = document.getElementById("responseModel");
+
+promptInput.addEventListener("input", () => {
+    charCount.textContent = promptInput.value.length;
+});
+
+
+clearPrompt.addEventListener("click", () => {
+    promptInput.value = "";
+    charCount.textContent = "0";
+    promptInput.focus();
+});
+
+
+copyResponse.addEventListener("click", async () => {
+    const text = response.innerText.trim();
+
+    if (!text) return;
+
+    try {
+        await navigator.clipboard.writeText(text);
+
+        copyResponse.textContent = "Copied";
+
+        setTimeout(() => {
+            copyResponse.textContent = "Copy";
+        }, 1400);
+
+    } catch {
+        copyResponse.textContent = "Failed";
+
+        setTimeout(() => {
+            copyResponse.textContent = "Copy";
+        }, 1400);
+    }
+});
+
+
+sendPrompt.addEventListener("click", async () => {
+
+    const prompt = promptInput.value.trim();
+
+    if (!prompt) {
+        promptInput.focus();
+        return;
+    }
+
+    sendPrompt.disabled = true;
+    sendPrompt.innerHTML = "Thinking...";
+
+    response.innerHTML = `
+        <div class="response-loading">
+            <div class="loading-dot"></div>
+            <div class="loading-dot"></div>
+            <div class="loading-dot"></div>
+        </div>
+    `;
+
+    try {
+
+        /*
+         * The real Cina API will be connected here.
+         *
+         * Example:
+         *
+         * const result = await fetch(
+         *     "https://api.cina.ai/v1/chat",
+         *     {
+         *         method: "POST",
+         *         headers: {
+         *             "Authorization":
+         *                 "Bearer " + apiKey,
+         *             "Content-Type":
+         *                 "application/json"
+         *         },
+         *         body: JSON.stringify({
+         *             model: "cina-1",
+         *             messages: [
+         *                 {
+         *                     role: "user",
+         *                     content: prompt
+         *                 }
+         *             ]
+         *         })
+         *     }
+         * );
+         */
+
+        await new Promise(resolve =>
+            setTimeout(resolve, 700)
+        );
+
+        response.innerHTML = `
+            <div class="response-message">
+                <span class="response-role">
+                    CINA-1
+                </span>
+
+                <p>
+                    Playground connection is ready.
+                    The real Cina AI model will be connected
+                    here when the API backend is deployed.
+                </p>
+            </div>
+        `;
+
+        responseModel.textContent = "cina-1";
+
+    } catch (error) {
+
+        response.innerHTML = `
+            <div class="response-error">
+                Unable to process the request.
+                Please try again.
+            </div>
+        `;
+
+    } finally {
+
+        sendPrompt.disabled = false;
+        sendPrompt.innerHTML = `
+            Send request
+            <span>→</span>
+        `;
+
+    }
+
+});
+</script>
+
+</body>
+</html>
