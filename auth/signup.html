@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Create your Cina AI developer account.">
+  <title>Create account — Cina AI</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body class="auth-page">
+
+<header class="site-header">
+  <div class="container nav-wrap">
+    <a href="../index.html" class="brand">Cina AI</a>
+
+    <nav class="main-nav">
+      <a href="../docs/index.html">Docs</a>
+      <a href="../models/index.html">Models</a>
+      <a href="../playground/index.html">Playground</a>
+      <a href="../pricing.html">Pricing</a>
+      <a href="login.html">Log in</a>
+    </nav>
+  </div>
+</header>
+
+<main class="auth-main">
+  <section class="auth-card signup-card">
+
+    <div class="auth-heading">
+      <span class="eyebrow">GET STARTED</span>
+      <h1>Create your account</h1>
+      <p>Start building with Cina AI.</p>
+    </div>
+
+    <form class="auth-form" id="signupForm">
+
+      <div class="form-field">
+        <label for="name">Full name</label>
+        <input
+          type="text"
+          id="name"
+          name="name"
+          placeholder="Your name"
+          autocomplete="name"
+          required
+        >
+      </div>
+
+      <div class="form-field">
+        <label for="email">Email address</label>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          placeholder="you@example.com"
+          autocomplete="email"
+          required
+        >
+      </div>
+
+      <div class="form-field">
+        <label for="password">Password</label>
+        <input
+          type="password"
+          id="password"
+          name="password"
+          placeholder="Create a password"
+          autocomplete="new-password"
+          minlength="8"
+          required
+        >
+        <div class="password-hint">
+          Use at least 8 characters.
+        </div>
+      </div>
+
+      <div class="form-field">
+        <label for="confirmPassword">Confirm password</label>
+        <input
+          type="password"
+          id="confirmPassword"
+          name="confirmPassword"
+          placeholder="Repeat your password"
+          autocomplete="new-password"
+          minlength="8"
+          required
+        >
+      </div>
+
+      <label class="remember-row terms-check">
+        <input type="checkbox" id="terms" required>
+        <span>
+          I agree to the
+          <a href="../legal/terms.html">Terms of Service</a>
+          and
+          <a href="../legal/privacy.html">Privacy Policy</a>.
+        </span>
+      </label>
+
+      <button type="submit" class="auth-submit">
+        Create account
+      </button>
+
+      <div class="auth-message" id="authMessage"></div>
+    </form>
+
+    <div class="auth-divider">
+      <span>or</span>
+    </div>
+
+    <button type="button" class="social-button" id="googleSignup">
+      <span class="social-icon">G</span>
+      Continue with Google
+    </button>
+
+    <p class="auth-bottom">
+      Already have an account?
+      <a href="login.html">Log in</a>
+    </p>
+
+  </section>
+</main>
+
+<footer class="auth-footer">
+  <a href="../legal/privacy.html">Privacy</a>
+  <a href="../legal/terms.html">Terms</a>
+  <span>© 2026 Cina AI</span>
+</footer>
+
+<script src="../assets/js/app.js"></script>
+
+<script>
+  const signupForm = document.getElementById("signupForm");
+  const authMessage = document.getElementById("authMessage");
+  const googleSignup = document.getElementById("googleSignup");
+
+  signupForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+
+    const password = document.getElementById("password").value;
+    const confirmPassword =
+      document.getElementById("confirmPassword").value;
+
+    if (password !== confirmPassword) {
+      authMessage.textContent = "Passwords do not match.";
+      authMessage.className = "auth-message visible error";
+      return;
+    }
+
+    authMessage.textContent =
+      "Account creation will be connected when the Cina AI backend is deployed.";
+
+    authMessage.className = "auth-message visible";
+  });
+
+  googleSignup.addEventListener("click", () => {
+    authMessage.textContent =
+      "Google authentication will be connected with the production authentication system.";
+
+    authMessage.className = "auth-message visible";
+  });
+</script>
+
+</body>
+</html>
