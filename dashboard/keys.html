@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Manage Cina AI API keys.">
+  <title>API Keys — Cina AI</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body class="dashboard-page">
+
+<header class="dashboard-header">
+  <div class="container dashboard-nav">
+    <a href="../index.html" class="brand">Cina AI</a>
+
+    <div class="dashboard-user">
+      <span class="user-avatar">A</span>
+      <span class="user-name">Developer</span>
+    </div>
+  </div>
+</header>
+
+<div class="dashboard-layout">
+
+  <aside class="dashboard-sidebar">
+    <nav class="dashboard-menu">
+
+      <div class="dashboard-menu-group">
+        <span class="dashboard-menu-title">Workspace</span>
+
+        <a href="index.html" class="dashboard-link">
+          <span>⌂</span>
+          Overview
+        </a>
+
+        <a href="usage.html" class="dashboard-link">
+          <span>◷</span>
+          Usage
+        </a>
+
+        <a href="keys.html" class="dashboard-link active">
+          <span>⚿</span>
+          API Keys
+        </a>
+
+        <a href="activity.html" class="dashboard-link">
+          <span>↕</span>
+          Activity
+        </a>
+      </div>
+
+      <div class="dashboard-menu-group">
+        <span class="dashboard-menu-title">Platform</span>
+
+        <a href="../models/index.html" class="dashboard-link">
+          <span>◈</span>
+          Models
+        </a>
+
+        <a href="../playground/index.html" class="dashboard-link">
+          <span>▷</span>
+          Playground
+        </a>
+
+        <a href="../docs/index.html" class="dashboard-link">
+          <span>?</span>
+          Documentation
+        </a>
+      </div>
+
+      <div class="dashboard-menu-group">
+        <span class="dashboard-menu-title">Account</span>
+
+        <a href="settings.html" class="dashboard-link">
+          <span>⚙</span>
+          Settings
+        </a>
+
+        <a href="../index.html" class="dashboard-link">
+          <span>↪</span>
+          Sign out
+        </a>
+      </div>
+
+    </nav>
+  </aside>
+
+  <main class="dashboard-content">
+
+    <div class="dashboard-top">
+      <div>
+        <span class="eyebrow">DEVELOPER ACCESS</span>
+        <h1>API Keys</h1>
+        <p>Create and manage the keys used by your applications.</p>
+      </div>
+
+      <button class="dashboard-primary-button" id="createKeyButton">
+        Create API key
+      </button>
+    </div>
+
+    <section class="dashboard-panel keys-panel">
+
+      <div class="panel-header">
+        <div>
+          <h2>Your API keys</h2>
+          <p>
+            Keep your API keys private. Never expose a production key
+            in public client-side code.
+          </p>
+        </div>
+      </div>
+
+      <div class="key-list" id="keyList">
+
+        <div class="key-empty" id="keyEmpty">
+          <div class="empty-icon">⚿</div>
+          <h3>No API keys yet</h3>
+          <p>
+            Create your first key to connect an application
+            to the Cina AI API.
+          </p>
+
+          <button class="dashboard-secondary-button" id="emptyCreateButton">
+            Create your first key
+          </button>
+        </div>
+
+      </div>
+
+    </section>
+
+    <section class="dashboard-panel security-panel">
+
+      <div class="panel-header">
+        <div>
+          <h2>API key security</h2>
+          <p>Important practices for protecting your credentials.</p>
+        </div>
+      </div>
+
+      <div class="security-grid">
+
+        <div class="security-item">
+          <strong>Keep keys private</strong>
+          <span>Do not publish keys in GitHub repositories or frontend code.</span>
+        </div>
+
+        <div class="security-item">
+          <strong>Use server-side requests</strong>
+          <span>Production API calls should normally pass through your backend.</span>
+        </div>
+
+        <div class="security-item">
+          <strong>Rotate compromised keys</strong>
+          <span>Revoke a key immediately if you believe it has been exposed.</span>
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+</div>
+
+<div class="dashboard-modal" id="createKeyModal">
+  <div class="dashboard-modal-card">
+
+    <button class="modal-close" id="closeKeyModal" aria-label="Close">
+      ×
+    </button>
+
+    <span class="eyebrow">NEW API KEY</span>
+    <h2>Create an API key</h2>
+
+    <p>
+      Give this key a recognizable name so you can identify it later.
+    </p>
+
+    <label class="modal-label" for="keyName">Key name</label>
+
+    <input
+      type="text"
+      id="keyName"
+      class="modal-input"
+      placeholder="My application"
+      maxlength="40"
+    >
+
+    <button class="dashboard-primary-button modal-create" id="confirmCreateKey">
+      Create key
+    </button>
+
+    <div class="modal-error" id="keyError"></div>
+
+  </div>
+</div>
+
+<div class="dashboard-modal" id="keyCreatedModal">
+  <div class="dashboard-modal-card">
+
+    <span class="eyebrow">KEY CREATED</span>
+    <h2>Your API key is ready</h2>
+
+    <p>
+      Copy this key now. For security, the complete key will only
+      be shown once.
+    </p>
+
+    <div class="generated-key">
+      <code id="generatedKey"></code>
+      <button id="copyGeneratedKey">Copy</button>
+    </div>
+
+    <button class="dashboard-primary-button modal-create" id="closeCreatedModal">
+      Done
+    </button>
+
+  </div>
+</div>
+
+<script src="../assets/js/app.js"></script>
+
+<script>
+  const createKeyButton = document.getElementById("createKeyButton");
+  const emptyCreateButton = document.getElementById("emptyCreateButton");
+  const createKeyModal = document.getElementById("createKeyModal");
+  const keyCreatedModal = document.getElementById("keyCreatedModal");
+  const closeKeyModal = document.getElementById("closeKeyModal");
+  const closeCreatedModal = document.getElementById("closeCreatedModal");
+  const confirmCreateKey = document.getElementById("confirmCreateKey");
+  const keyName = document.getElementById("keyName");
+  const keyError = document.getElementById("keyError");
+  const generatedKey = document.getElementById("generatedKey");
+  const copyGeneratedKey = document.getElementById("copyGeneratedKey");
+  const keyEmpty = document.getElementById("keyEmpty");
+  const keyList = document.getElementById("keyList");
+
+  function openCreateModal() {
+    keyError.textContent = "";
+    keyName.value = "";
+    createKeyModal.classList.add("open");
+    setTimeout(() => keyName.focus(), 100);
+  }
+
+  function closeCreateModal() {
+    createKeyModal.classList.remove("open");
+  }
+
+  createKeyButton.addEventListener("click", openCreateModal);
+  emptyCreateButton.addEventListener("click", openCreateModal);
+  closeKeyModal.addEventListener("click", closeCreateModal);
+
+  confirmCreateKey.addEventListener("click", () => {
+    const name = keyName.value.trim();
+
+    if (!name) {
+      keyError.textContent = "Enter a name for this API key.";
+      return;
+    }
+
+    const randomPart = crypto.randomUUID()
+      .replaceAll("-", "")
+      .slice(0, 28);
+
+    const newKey = `fc_live_${randomPart}`;
+
+    generatedKey.textContent = newKey;
+
+    closeCreateModal();
+
+    keyEmpty.style.display = "none";
+
+    const keyItem = document.createElement("div");
+    keyItem.className = "api-key-item";
+
+    keyItem.innerHTML = `
+      <div class="key-info">
+        <div class="key-icon">⚿</div>
+        <div>
+          <strong>${name}</strong>
+          <span>fc_live_••••••••••••••••••••••••••••</span>
+        </div>
+      </div>
+
+      <div class="key-meta">
+        <span class="key-status">Active</span>
+        <small>Created just now</small>
+      </div>
+
+      <button class="revoke-button" type="button">
+        Revoke
+      </button>
+    `;
+
+    keyList.prepend(keyItem);
+
+    keyCreatedModal.classList.add("open");
+  });
+
+  copyGeneratedKey.addEventListener("click", async () => {
+    const value = generatedKey.textContent;
+
+    await navigator.clipboard.writeText(value);
+
+    copyGeneratedKey.textContent = "Copied";
+
+    setTimeout(() => {
+      copyGeneratedKey.textContent = "Copy";
+    }, 1500);
+  });
+
+  closeCreatedModal.addEventListener("click", () => {
+    keyCreatedModal.classList.remove("open");
+  });
+
+  document.addEventListener("click", (event) => {
+    if (event.target.classList.contains("revoke-button")) {
+      const item = event.target.closest(".api-key-item");
+
+      if (confirm("Revoke this API key?")) {
+        item.remove();
+      }
+    }
+  });
+</script>
+
+</body>
+</html>
