@@ -14,8 +14,8 @@
     <a href="../index.html" class="brand">Cina AI</a>
 
     <div class="dashboard-user">
-      <span class="user-avatar">A</span>
-      <span class="user-name">Developer</span>
+      <span class="user-avatar" id="userAvatar">A</span>
+      <span class="user-name" id="userName">Developer</span>
     </div>
   </div>
 </header>
@@ -76,10 +76,11 @@
           Settings
         </a>
 
-        <a href="../index.html" class="dashboard-link">
+        <a href="../index.html" class="dashboard-link" id="signOutLink">
           <span>↪</span>
           Sign out
         </a>
+
       </div>
 
     </nav>
@@ -185,6 +186,7 @@
       class="modal-input"
       placeholder="My application"
       maxlength="40"
+      autocomplete="off"
     >
 
     <button class="dashboard-primary-button modal-create" id="confirmCreateKey">
@@ -220,109 +222,466 @@
 </div>
 
 <script src="../assets/js/app.js"></script>
+<script src="../assets/js/api.js"></script>
 
 <script>
-  const createKeyButton = document.getElementById("createKeyButton");
-  const emptyCreateButton = document.getElementById("emptyCreateButton");
-  const createKeyModal = document.getElementById("createKeyModal");
-  const keyCreatedModal = document.getElementById("keyCreatedModal");
-  const closeKeyModal = document.getElementById("closeKeyModal");
-  const closeCreatedModal = document.getElementById("closeCreatedModal");
-  const confirmCreateKey = document.getElementById("confirmCreateKey");
-  const keyName = document.getElementById("keyName");
-  const keyError = document.getElementById("keyError");
-  const generatedKey = document.getElementById("generatedKey");
-  const copyGeneratedKey = document.getElementById("copyGeneratedKey");
-  const keyEmpty = document.getElementById("keyEmpty");
-  const keyList = document.getElementById("keyList");
+  const jwt =
+    localStorage.getItem("cina_jwt") ||
+    sessionStorage.getItem("cina_jwt");
+
+  if (!jwt) {
+    window.location.href = "../auth/login.html";
+  }
+
+  const createKeyButton =
+    document.getElementById("createKeyButton");
+
+  const emptyCreateButton =
+    document.getElementById("emptyCreateButton");
+
+  const createKeyModal =
+    document.getElementById("createKeyModal");
+
+  const keyCreatedModal =
+    document.getElementById("keyCreatedModal");
+
+  const closeKeyModal =
+    document.getElementById("closeKeyModal");
+
+  const closeCreatedModal =
+    document.getElementById("closeCreatedModal");
+
+  const confirmCreateKey =
+    document.getElementById("confirmCreateKey");
+
+  const keyName =
+    document.getElementById("keyName");
+
+  const keyError =
+    document.getElementById("keyError");
+
+  const generatedKey =
+    document.getElementById("generatedKey");
+
+  const copyGeneratedKey =
+    document.getElementById("copyGeneratedKey");
+
+  const keyEmpty =
+    document.getElementById("keyEmpty");
+
+  const keyList =
+    document.getElementById("keyList");
+
+  const userName =
+    document.getElementById("userName");
+
+  const userAvatar =
+    document.getElementById("userAvatar");
+
+  const signOutLink =
+    document.getElementById("signOutLink");
+
+
+  function loadUser() {
+    const savedUser =
+      localStorage.getItem("cina_user");
+
+    if (!savedUser) {
+      const email =
+        localStorage.getItem("cina_user_email") ||
+        sessionStorage.getItem("cina_user_email");
+
+      if (email) {
+        userName.textContent = email;
+        userAvatar.textContent =
+          email.charAt(0).toUpperCase();
+      }
+
+      return;
+    }
+
+    try {
+      const user = JSON.parse(savedUser);
+
+      const name =
+        user.name ||
+        user.full_name ||
+        user.email ||
+        "Developer";
+
+      userName.textContent = name;
+      userAvatar.textContent =
+        name.charAt(0).toUpperCase();
+
+    } catch {
+      userName.textContent = "Developer";
+    }
+  }
+
 
   function openCreateModal() {
     keyError.textContent = "";
     keyName.value = "";
+    confirmCreateKey.disabled = false;
+    confirmCreateKey.textContent = "Create key";
+
     createKeyModal.classList.add("open");
-    setTimeout(() => keyName.focus(), 100);
+
+    setTimeout(() => {
+      keyName.focus();
+    }, 100);
   }
+
 
   function closeCreateModal() {
     createKeyModal.classList.remove("open");
   }
 
-  createKeyButton.addEventListener("click", openCreateModal);
-  emptyCreateButton.addEventListener("click", openCreateModal);
-  closeKeyModal.addEventListener("click", closeCreateModal);
 
-  confirmCreateKey.addEventListener("click", () => {
-    const name = keyName.value.trim();
+  function openCreatedModal(apiKey) {
+    generatedKey.textContent = apiKey;
+    copyGeneratedKey.textContent = "Copy";
+    keyCreatedModal.classList.add("open");
+  }
 
-    if (!name) {
-      keyError.textContent = "Enter a name for this API key.";
+
+  function closeCreatedKeyModal() {
+    keyCreatedModal.classList.remove("open");
+  }
+
+
+  function escapeHtml(value) {
+    return String(value)
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#039;");
+  }
+
+
+  function formatDate(value) {
+    if (!value) {
+      return "Unknown date";
+    }
+
+    const date = new Date(value);
+
+    if (Number.isNaN(date.getTime())) {
+      return "Unknown date";
+    }
+
+    return date.toLocaleDateString(undefined, {
+      year: "numeric",
+      month: "short",
+      day: "numeric"
+    });
+  }
+
+
+  function isActiveKey(key) {
+    return !key.revoked_at;
+  }
+
+
+  function renderKeys(keys) {
+    keyList.innerHTML = "";
+
+    if (!keys.length) {
+      keyList.appendChild(keyEmpty);
+      keyEmpty.style.display = "";
       return;
     }
 
-    const randomPart = crypto.randomUUID()
-      .replaceAll("-", "")
-      .slice(0, 28);
-
-    const newKey = `fc_live_${randomPart}`;
-
-    generatedKey.textContent = newKey;
-
-    closeCreateModal();
-
     keyEmpty.style.display = "none";
 
-    const keyItem = document.createElement("div");
-    keyItem.className = "api-key-item";
+    keys.forEach((key) => {
+      const item = document.createElement("div");
+      item.className = "api-key-item";
 
-    keyItem.innerHTML = `
-      <div class="key-info">
-        <div class="key-icon">⚿</div>
-        <div>
-          <strong>${name}</strong>
-          <span>fc_live_••••••••••••••••••••••••••••</span>
+      const environment =
+        key.environment === "test"
+          ? "Test"
+          : "Live";
+
+      const status =
+        isActiveKey(key)
+          ? "Active"
+          : "Revoked";
+
+      const prefix =
+        key.key_prefix || "fc_";
+
+      item.innerHTML = `
+        <div class="key-info">
+          <div class="key-icon">⚿</div>
+
+          <div>
+            <strong>${escapeHtml(key.name || "Unnamed key")}</strong>
+            <span>
+              ${escapeHtml(prefix)}••••••••••••
+            </span>
+          </div>
         </div>
-      </div>
 
-      <div class="key-meta">
-        <span class="key-status">Active</span>
-        <small>Created just now</small>
-      </div>
+        <div class="key-meta">
+          <span class="key-status">${status}</span>
+          <small>
+            ${environment} · Created ${formatDate(key.created_at)}
+          </small>
+        </div>
 
-      <button class="revoke-button" type="button">
-        Revoke
-      </button>
-    `;
+        ${
+          isActiveKey(key)
+            ? `
+              <button
+                class="revoke-button"
+                type="button"
+                data-key-id="${escapeHtml(key.id)}"
+              >
+                Revoke
+              </button>
+            `
+            : ""
+        }
+      `;
 
-    keyList.prepend(keyItem);
+      keyList.appendChild(item);
+    });
+  }
 
-    keyCreatedModal.classList.add("open");
-  });
 
-  copyGeneratedKey.addEventListener("click", async () => {
-    const value = generatedKey.textContent;
+  async function loadKeys() {
+    try {
+      const result =
+        await CinaAPI.getApiKeys(jwt);
 
-    await navigator.clipboard.writeText(value);
+      const keys =
+        result?.data?.api_keys || [];
 
-    copyGeneratedKey.textContent = "Copied";
+      renderKeys(keys);
 
-    setTimeout(() => {
-      copyGeneratedKey.textContent = "Copy";
-    }, 1500);
-  });
+    } catch (error) {
+      if (
+        error.message &&
+        (
+          error.message.toLowerCase().includes("unauthorized") ||
+          error.message.toLowerCase().includes("token") ||
+          error.message.includes("401")
+        )
+      ) {
+        localStorage.removeItem("cina_jwt");
+        sessionStorage.removeItem("cina_jwt");
 
-  closeCreatedModal.addEventListener("click", () => {
-    keyCreatedModal.classList.remove("open");
-  });
+        localStorage.removeItem("cina_user");
+        localStorage.removeItem("cina_user_email");
 
-  document.addEventListener("click", (event) => {
-    if (event.target.classList.contains("revoke-button")) {
-      const item = event.target.closest(".api-key-item");
+        window.location.href = "../auth/login.html";
+        return;
+      }
 
-      if (confirm("Revoke this API key?")) {
-        item.remove();
+      keyList.innerHTML = `
+        <div class="key-empty">
+          <div class="empty-icon">⚠</div>
+          <h3>Unable to load API keys</h3>
+          <p>${escapeHtml(error.message || "Please try again.")}</p>
+        </div>
+      `;
+    }
+  }
+
+
+  async function createApiKey() {
+    const name = keyName.value.trim();
+
+    if (!name) {
+      keyError.textContent =
+        "Enter a name for this API key.";
+      return;
+    }
+
+    confirmCreateKey.disabled = true;
+    confirmCreateKey.textContent = "Creating...";
+    keyError.textContent = "";
+
+    try {
+      const result =
+        await CinaAPI.createApiKey(
+          {
+            name,
+            environment: "live"
+          },
+          jwt
+        );
+
+      const createdKey =
+        result?.data;
+
+      if (!createdKey?.api_key) {
+        throw new Error(
+          "The API did not return the generated key."
+        );
+      }
+
+      closeCreateModal();
+
+      await loadKeys();
+
+      openCreatedModal(
+        createdKey.api_key
+      );
+
+    } catch (error) {
+      keyError.textContent =
+        error.message ||
+        "Unable to create API key.";
+
+      confirmCreateKey.disabled = false;
+      confirmCreateKey.textContent =
+        "Create key";
+    }
+  }
+
+
+  async function revokeApiKey(id, button) {
+    if (!id) {
+      return;
+    }
+
+    const confirmed =
+      confirm(
+        "Revoke this API key? This action cannot be undone."
+      );
+
+    if (!confirmed) {
+      return;
+    }
+
+    button.disabled = true;
+    button.textContent = "Revoking...";
+
+    try {
+      await CinaAPI.revokeApiKey(
+        id,
+        jwt
+      );
+
+      await loadKeys();
+
+    } catch (error) {
+      button.disabled = false;
+      button.textContent = "Revoke";
+
+      alert(
+        error.message ||
+        "Unable to revoke API key."
+      );
+    }
+  }
+
+
+  createKeyButton.addEventListener(
+    "click",
+    openCreateModal
+  );
+
+  emptyCreateButton.addEventListener(
+    "click",
+    openCreateModal
+  );
+
+  closeKeyModal.addEventListener(
+    "click",
+    closeCreateModal
+  );
+
+  closeCreatedModal.addEventListener(
+    "click",
+    closeCreatedKeyModal
+  );
+
+
+  confirmCreateKey.addEventListener(
+    "click",
+    createApiKey
+  );
+
+
+  keyName.addEventListener(
+    "keydown",
+    (event) => {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        createApiKey();
       }
     }
-  });
+  );
+
+
+  copyGeneratedKey.addEventListener(
+    "click",
+    async () => {
+      const value =
+        generatedKey.textContent;
+
+      try {
+        await navigator.clipboard.writeText(value);
+
+        copyGeneratedKey.textContent =
+          "Copied";
+
+        setTimeout(() => {
+          copyGeneratedKey.textContent =
+            "Copy";
+        }, 1500);
+
+      } catch {
+        copyGeneratedKey.textContent =
+          "Copy failed";
+      }
+    }
+  );
+
+
+  document.addEventListener(
+    "click",
+    (event) => {
+      const button =
+        event.target.closest(".revoke-button");
+
+      if (!button) {
+        return;
+      }
+
+      revokeApiKey(
+        button.dataset.keyId,
+        button
+      );
+    }
+  );
+
+
+  signOutLink.addEventListener(
+    "click",
+    (event) => {
+      event.preventDefault();
+
+      localStorage.removeItem("cina_jwt");
+      sessionStorage.removeItem("cina_jwt");
+
+      localStorage.removeItem("cina_user");
+      localStorage.removeItem("cina_user_email");
+
+      sessionStorage.removeItem("cina_user_email");
+
+      window.location.href =
+        "../index.html";
+    }
+  );
+
+
+  loadUser();
+  loadKeys();
 </script>
 
 </body>
