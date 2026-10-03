@@ -1,4 +1,4 @@
-const CINA_API_BASE = "https://nationally-barbie-attractive-exposed.trycloudflare.com/v1";
+const CINA_API_BASE = "https://oak-went-lawsuit-applicant.trycloudflare.com/v1";
 
 async function apiRequest(endpoint, options = {}) {
     const response = await fetch(`${CINA_API_BASE}${endpoint}`, {
