@@ -102,7 +102,9 @@
 
                         <span class="status-dot"></span>
 
-                        API ready
+                        <span id="apiStatus">
+                            API ready
+                        </span>
 
                     </div>
 
@@ -287,7 +289,7 @@
 
                 <div class="playground-code">
 
-<pre><code>POST /v1/chat
+<pre><code>POST /v1/chat/completions
 
 {
   "model": "cina-1",
@@ -403,6 +405,7 @@
 
 
 <script src="../assets/js/app.js"></script>
+<script src="../assets/js/api.js"></script>
 
 <script>
 const promptInput = document.getElementById("prompt");
@@ -412,6 +415,9 @@ const sendPrompt = document.getElementById("sendPrompt");
 const response = document.getElementById("response");
 const copyResponse = document.getElementById("copyResponse");
 const responseModel = document.getElementById("responseModel");
+const responseTokens = document.getElementById("responseTokens");
+const modelInput = document.getElementById("model");
+const apiStatus = document.getElementById("apiStatus");
 
 promptInput.addEventListener("input", () => {
     charCount.textContent = promptInput.value.length;
@@ -428,7 +434,9 @@ clearPrompt.addEventListener("click", () => {
 copyResponse.addEventListener("click", async () => {
     const text = response.innerText.trim();
 
-    if (!text) return;
+    if (!text || text === "Your response will appear here.") {
+        return;
+    }
 
     try {
         await navigator.clipboard.writeText(text);
@@ -449,6 +457,62 @@ copyResponse.addEventListener("click", async () => {
 });
 
 
+function getApiKey() {
+    let apiKey = sessionStorage.getItem("cina_playground_api_key");
+
+    if (apiKey) {
+        return apiKey;
+    }
+
+    apiKey = window.prompt(
+        "Enter your Cina AI API key:"
+    );
+
+    if (!apiKey) {
+        return null;
+    }
+
+    apiKey = apiKey.trim();
+
+    if (!apiKey) {
+        return null;
+    }
+
+    sessionStorage.setItem(
+        "cina_playground_api_key",
+        apiKey
+    );
+
+    return apiKey;
+}
+
+
+function extractResponseText(result) {
+    return (
+        result?.data?.choices?.[0]?.message?.content ||
+        result?.choices?.[0]?.message?.content ||
+        result?.data?.message?.content ||
+        result?.message?.content ||
+        result?.data?.response ||
+        result?.response ||
+        result?.data?.text ||
+        result?.text ||
+        null
+    );
+}
+
+
+function extractTokenCount(result) {
+    return (
+        result?.data?.usage?.total_tokens ??
+        result?.usage?.total_tokens ??
+        result?.data?.tokens ??
+        result?.tokens ??
+        "—"
+    );
+}
+
+
 sendPrompt.addEventListener("click", async () => {
 
     const prompt = promptInput.value.trim();
@@ -458,8 +522,16 @@ sendPrompt.addEventListener("click", async () => {
         return;
     }
 
+    const apiKey = getApiKey();
+
+    if (!apiKey) {
+        return;
+    }
+
     sendPrompt.disabled = true;
     sendPrompt.innerHTML = "Thinking...";
+
+    apiStatus.textContent = "Connecting...";
 
     response.innerHTML = `
         <div class="response-loading">
@@ -471,37 +543,30 @@ sendPrompt.addEventListener("click", async () => {
 
     try {
 
-        /*
-         * The real Cina API will be connected here.
-         *
-         * Example:
-         *
-         * const result = await fetch(
-         *     "https://api.cina.ai/v1/chat",
-         *     {
-         *         method: "POST",
-         *         headers: {
-         *             "Authorization":
-         *                 "Bearer " + apiKey,
-         *             "Content-Type":
-         *                 "application/json"
-         *         },
-         *         body: JSON.stringify({
-         *             model: "cina-1",
-         *             messages: [
-         *                 {
-         *                     role: "user",
-         *                     content: prompt
-         *                 }
-         *             ]
-         *         })
-         *     }
-         * );
-         */
+        const model = modelInput.value;
 
-        await new Promise(resolve =>
-            setTimeout(resolve, 700)
+        const result = await CinaAPI.chat(
+            [
+                {
+                    role: "user",
+                    content: prompt
+                }
+            ],
+            apiKey,
+            {
+                model,
+                temperature: 0.7,
+                max_tokens: 500
+            }
         );
+
+        const answer = extractResponseText(result);
+
+        if (!answer) {
+            throw new Error(
+                "The API returned an empty response."
+            );
+        }
 
         response.innerHTML = `
             <div class="response-message">
@@ -509,28 +574,43 @@ sendPrompt.addEventListener("click", async () => {
                     CINA-1
                 </span>
 
-                <p>
-                    Playground connection is ready.
-                    The real Cina AI model will be connected
-                    here when the API backend is deployed.
-                </p>
+                <p></p>
             </div>
         `;
 
-        responseModel.textContent = "cina-1";
+        response.querySelector("p").textContent = answer;
+
+        responseModel.textContent = model;
+        responseTokens.textContent = extractTokenCount(result);
+
+        apiStatus.textContent = "API ready";
 
     } catch (error) {
 
+        if (
+            error.message.includes("401") ||
+            error.message.toLowerCase().includes("api key") ||
+            error.message.toLowerCase().includes("unauthorized")
+        ) {
+            sessionStorage.removeItem(
+                "cina_playground_api_key"
+            );
+        }
+
         response.innerHTML = `
-            <div class="response-error">
-                Unable to process the request.
-                Please try again.
-            </div>
+            <div class="response-error"></div>
         `;
+
+        response.querySelector(".response-error").textContent =
+            error.message ||
+            "Unable to process the request.";
+
+        apiStatus.textContent = "API error";
 
     } finally {
 
         sendPrompt.disabled = false;
+
         sendPrompt.innerHTML = `
             Send request
             <span>→</span>
