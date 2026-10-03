@@ -66,7 +66,7 @@
         <span>Remember me</span>
       </label>
 
-      <button type="submit" class="auth-submit">
+      <button type="submit" class="auth-submit" id="loginButton">
         Log in
       </button>
 
@@ -96,24 +96,81 @@
 </footer>
 
 <script src="../assets/js/app.js"></script>
+<script src="../assets/js/api.js"></script>
 
 <script>
   const loginForm = document.getElementById("loginForm");
   const authMessage = document.getElementById("authMessage");
+  const loginButton = document.getElementById("loginButton");
   const googleLogin = document.getElementById("googleLogin");
+  const remember = document.getElementById("remember");
 
-  loginForm.addEventListener("submit", (event) => {
+  loginForm.addEventListener("submit", async (event) => {
     event.preventDefault();
 
-    authMessage.textContent =
-      "Authentication will be connected when the Cina AI backend is deployed.";
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value;
 
-    authMessage.className = "auth-message visible";
+    if (!email || !password) {
+      authMessage.textContent = "Please enter your email and password.";
+      authMessage.className = "auth-message visible";
+      return;
+    }
+
+    loginButton.disabled = true;
+    loginButton.textContent = "Logging in...";
+
+    authMessage.textContent = "";
+    authMessage.className = "auth-message";
+
+    try {
+      const result = await CinaAPI.login({
+        email,
+        password
+      });
+
+      const token =
+        result.token ||
+        result.access_token ||
+        result.data?.token ||
+        result.data?.access_token;
+
+      if (!token) {
+        throw new Error("Login succeeded but no authentication token was returned.");
+      }
+
+      const storage = remember.checked
+        ? localStorage
+        : sessionStorage;
+
+      storage.setItem("cina_jwt", token);
+      storage.setItem("cina_user_email", email);
+
+      if (result.user) {
+        storage.setItem("cina_user", JSON.stringify(result.user));
+      }
+
+      authMessage.textContent = "Login successful. Redirecting...";
+      authMessage.className = "auth-message visible";
+
+      window.location.href = "../dashboard/index.html";
+
+    } catch (error) {
+      console.error("Cina AI login error:", error);
+
+      authMessage.textContent =
+        error.message || "Login failed. Please check your credentials.";
+
+      authMessage.className = "auth-message visible";
+
+      loginButton.disabled = false;
+      loginButton.textContent = "Log in";
+    }
   });
 
   googleLogin.addEventListener("click", () => {
     authMessage.textContent =
-      "Google authentication will be connected with the production authentication system.";
+      "Google authentication is not connected yet.";
 
     authMessage.className = "auth-message visible";
   });
