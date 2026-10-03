@@ -97,7 +97,7 @@
         </span>
       </label>
 
-      <button type="submit" class="auth-submit">
+      <button type="submit" class="auth-submit" id="signupButton">
         Create account
       </button>
 
@@ -128,15 +128,19 @@
 </footer>
 
 <script src="../assets/js/app.js"></script>
+<script src="../assets/js/api.js"></script>
 
 <script>
   const signupForm = document.getElementById("signupForm");
   const authMessage = document.getElementById("authMessage");
   const googleSignup = document.getElementById("googleSignup");
+  const signupButton = document.getElementById("signupButton");
 
-  signupForm.addEventListener("submit", (event) => {
+  signupForm.addEventListener("submit", async (event) => {
     event.preventDefault();
 
+    const name = document.getElementById("name").value.trim();
+    const email = document.getElementById("email").value.trim();
     const password = document.getElementById("password").value;
     const confirmPassword =
       document.getElementById("confirmPassword").value;
@@ -147,15 +151,70 @@
       return;
     }
 
-    authMessage.textContent =
-      "Account creation will be connected when the Cina AI backend is deployed.";
+    if (password.length < 8) {
+      authMessage.textContent =
+        "Password must be at least 8 characters.";
+      authMessage.className = "auth-message visible error";
+      return;
+    }
 
-    authMessage.className = "auth-message visible";
+    signupButton.disabled = true;
+    signupButton.textContent = "Creating account...";
+
+    authMessage.textContent = "";
+    authMessage.className = "auth-message";
+
+    try {
+      const result = await CinaAPI.signup({
+        name,
+        email,
+        password,
+        language: "en"
+      });
+
+      const token =
+        result.access_token ||
+        result.token ||
+        result.data?.access_token ||
+        result.data?.token;
+
+      const user =
+        result.user ||
+        result.data?.user;
+
+      if (!token) {
+        throw new Error("Account created, but authentication token was not returned.");
+      }
+
+      localStorage.setItem("cina_jwt", token);
+      localStorage.setItem("cina_user_email", email);
+
+      if (user) {
+        localStorage.setItem(
+          "cina_user",
+          JSON.stringify(user)
+        );
+      }
+
+      authMessage.textContent =
+        "Account created successfully. Redirecting...";
+      authMessage.className = "auth-message visible";
+
+      window.location.href = "../dashboard/index.html";
+
+    } catch (error) {
+      authMessage.textContent =
+        error.message || "Unable to create your account.";
+      authMessage.className = "auth-message visible error";
+
+      signupButton.disabled = false;
+      signupButton.textContent = "Create account";
+    }
   });
 
   googleSignup.addEventListener("click", () => {
     authMessage.textContent =
-      "Google authentication will be connected with the production authentication system.";
+      "Google authentication is not connected yet.";
 
     authMessage.className = "auth-message visible";
   });
