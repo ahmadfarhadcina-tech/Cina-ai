@@ -14,8 +14,8 @@
     <a href="../index.html" class="brand">Cina AI</a>
 
     <div class="dashboard-user">
-      <span class="user-avatar">A</span>
-      <span class="user-name">Developer</span>
+      <span class="user-avatar" id="userAvatar">A</span>
+      <span class="user-name" id="userName">Developer</span>
     </div>
   </div>
 </header>
@@ -76,7 +76,7 @@
           Settings
         </a>
 
-        <a href="../index.html" class="dashboard-link">
+        <a href="../index.html" class="dashboard-link" id="signOutLink">
           <span>↪</span>
           Sign out
         </a>
@@ -90,7 +90,7 @@
     <div class="dashboard-top">
       <div>
         <span class="eyebrow">DEVELOPER DASHBOARD</span>
-        <h1>Welcome back.</h1>
+        <h1 id="welcomeTitle">Welcome back.</h1>
         <p>Manage your Cina AI API access and development activity.</p>
       </div>
 
@@ -103,19 +103,19 @@
 
       <article class="dashboard-stat-card">
         <span class="stat-label">API requests</span>
-        <strong>0</strong>
+        <strong id="requestCount">0</strong>
         <small>This month</small>
       </article>
 
       <article class="dashboard-stat-card">
         <span class="stat-label">Tokens used</span>
-        <strong>0</strong>
+        <strong id="tokenCount">0</strong>
         <small>This month</small>
       </article>
 
       <article class="dashboard-stat-card">
         <span class="stat-label">API keys</span>
-        <strong>0</strong>
+        <strong id="apiKeyCount">0</strong>
         <small>Active keys</small>
       </article>
 
@@ -136,13 +136,13 @@
             <p>Your connection to the Cina AI API.</p>
           </div>
 
-          <span class="status-pill">Ready</span>
+          <span class="status-pill" id="apiStatus">Checking...</span>
         </div>
 
         <div class="api-preview">
           <div>
             <span>Base URL</span>
-            <code>https://api.cina.ai/v1</code>
+            <code>https://infections-learning-jar-strategic.trycloudflare.com/v1</code>
           </div>
 
           <div>
@@ -202,7 +202,7 @@
         </a>
       </div>
 
-      <div class="empty-state">
+      <div class="empty-state" id="emptyActivity">
         <div class="empty-icon">◷</div>
         <h3>No activity yet</h3>
         <p>
@@ -221,6 +221,122 @@
 </div>
 
 <script src="../assets/js/app.js"></script>
+<script src="../assets/js/api.js"></script>
+
+<script>
+  const jwt =
+    localStorage.getItem("cina_jwt") ||
+    sessionStorage.getItem("cina_jwt");
+
+  if (!jwt) {
+    window.location.href = "../auth/login.html";
+  }
+
+  const userName = document.getElementById("userName");
+  const userAvatar = document.getElementById("userAvatar");
+  const welcomeTitle = document.getElementById("welcomeTitle");
+  const apiKeyCount = document.getElementById("apiKeyCount");
+  const apiStatus = document.getElementById("apiStatus");
+  const signOutLink = document.getElementById("signOutLink");
+
+  function loadUser() {
+    const savedUser = localStorage.getItem("cina_user");
+
+    if (!savedUser) {
+      const email =
+        localStorage.getItem("cina_user_email") ||
+        sessionStorage.getItem("cina_user_email");
+
+      if (email) {
+        userName.textContent = email;
+        welcomeTitle.textContent = "Welcome back.";
+        userAvatar.textContent = email.charAt(0).toUpperCase();
+      }
+
+      return;
+    }
+
+    try {
+      const user = JSON.parse(savedUser);
+
+      const name =
+        user.name ||
+        user.full_name ||
+        user.email ||
+        "Developer";
+
+      userName.textContent = name;
+      welcomeTitle.textContent = `Welcome back, ${name.split(" ")[0]}.`;
+      userAvatar.textContent = name.charAt(0).toUpperCase();
+
+    } catch {
+      userName.textContent = "Developer";
+    }
+  }
+
+  async function loadDashboard() {
+    try {
+      const keysResult = await CinaAPI.getApiKeys(jwt);
+
+      const keys =
+        Array.isArray(keysResult)
+          ? keysResult
+          : keysResult.data?.keys ||
+            keysResult.data ||
+            keysResult.keys ||
+            [];
+
+      const activeKeys = keys.filter((key) => {
+        return (
+          key.revoked !== true &&
+          key.is_revoked !== true &&
+          key.status !== "revoked"
+        );
+      });
+
+      apiKeyCount.textContent = activeKeys.length;
+      apiStatus.textContent = "Ready";
+      apiStatus.classList.remove("error");
+
+    } catch (error) {
+      apiStatus.textContent = "Unavailable";
+      apiStatus.classList.add("error");
+
+      if (
+        error.message &&
+        (
+          error.message.toLowerCase().includes("unauthorized") ||
+          error.message.toLowerCase().includes("token") ||
+          error.message.includes("401")
+        )
+      ) {
+        localStorage.removeItem("cina_jwt");
+        sessionStorage.removeItem("cina_jwt");
+        localStorage.removeItem("cina_user");
+        localStorage.removeItem("cina_user_email");
+
+        window.location.href = "../auth/login.html";
+      }
+    }
+  }
+
+  signOutLink.addEventListener("click", (event) => {
+    event.preventDefault();
+
+    localStorage.removeItem("cina_jwt");
+    sessionStorage.removeItem("cina_jwt");
+
+    localStorage.removeItem("cina_user");
+    localStorage.removeItem("cina_user_email");
+
+    sessionStorage.removeItem("cina_user_email");
+
+    window.location.href = "../index.html";
+  });
+
+  loadUser();
+  loadDashboard();
+</script>
 
 </body>
 </html>
